@@ -39,7 +39,7 @@ void print_int(int n, int *char_count)
 }
 
 /**
- * _printf - My printf function supporting %c, %s, and %d
+ * _printf - My printf function supporting %c, %s, %d, and %%
  * @format: The string
  * Return: Number of characters printed
  */
@@ -54,28 +54,36 @@ int _printf(const char *format, ...)
     {
         if (*format == '%' && *(format + 1))
         {
-            switch (*(format + 1))
+            if (*(format + 1) == '%')
             {
-            case 'c':
-                print_char(va_arg(args, int), &char_count);
-                break;
-            case 's':
+                print_char('%', &char_count);
+                format += 2; /* Skip both '%' characters */
+            }
+            else
             {
-                char *str = va_arg(args, char *);
-                if (str)
-                    print_str(str, &char_count);
-                else
-                    print_str("(null)", &char_count);
-            }
-            break;
-            case 'd':
-                print_int(va_arg(args, int), &char_count);
+                switch (*(format + 1))
+                {
+                case 'c':
+                    print_char(va_arg(args, int), &char_count);
+                    break;
+                case 's':
+                {
+                    char *str = va_arg(args, char *);
+                    if (str)
+                        print_str(str, &char_count);
+                    else
+                        print_str("(null)", &char_count);
+                }
                 break;
-            default:
-                print_unsupported(*(format + 1), &char_count);
-                break;
+                case 'd':
+                    print_int(va_arg(args, int), &char_count);
+                    break;
+                default:
+                    print_unsupported(*(format + 1), &char_count);
+                    break;
+                }
+                format += 2; /* Move to the next format specifier */
             }
-            format += 2; /* Move to the next format specifier */
         }
         else
         {
