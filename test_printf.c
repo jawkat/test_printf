@@ -16,7 +16,8 @@ void _putchar(char c) {
  */
 int _strlen(const char *str) {
     int len = 0;
-    while (*str) {
+    while (*str) 
+    {
         len++;
         str++;
     }
