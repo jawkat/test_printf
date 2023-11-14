@@ -6,39 +6,40 @@
  */
 void parse_format(const char *format, va_list args, int *char_count)
 {
-    while (*format)
-    {
-        if (*format == '%' && *(format + 1))
-        {
-            if (*(format + 1) == '%')
-            {
-                print_char('%', char_count);
-                format += 2;
-            }
-            else
-            {
-                switch (*(format + 1))
-                {
-                case 'c':
-                    print_char(va_arg(args, int), char_count);
-                    break;
-                case 's':
-                    print_str(va_arg(args, char *), char_count);
-                    break;
-                case 'd':
-                    print_int(va_arg(args, int), char_count);
-                    break;
-                default:
-                    print_unsupported(*(format + 1), char_count);
-                    break;
-                }
-                format += 2;
-            }
-        }
-        else
-        {
-            print_char(*format, char_count);
-            ++format;
-        }
-    }
+	while (*format)
+	{
+		if (*format == '%' && *(format + 1))
+		{
+			if (*(format + 1) == '%')
+			{
+				print_char('%', char_count);
+				format += 2;
+			}
+			else
+			{
+				switch (*(format + 1))
+				{
+				case 'c':
+					print_char(va_arg(args, int), char_count);
+					break;
+				case 's':
+					print_str(va_arg(args, char *), char_count);
+					break;
+				case 'd':
+                case 'i':
+					print_int(va_arg(args, int), char_count);
+					break;
+				default:
+					print_unsupported(*(format + 1), char_count);
+					break;
+				}
+				format += 2;
+			}
+		}
+		else
+		{
+			print_char(*format, char_count);
+			++format;
+		}
+	}
 }
