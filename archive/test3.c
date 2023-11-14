@@ -48,18 +48,6 @@ int my_printf(const char *format, ...)
 			++format;
 		}
 	}
-
 	va_end(args);
 	return char_count;
-}
-
-int main(void)
-{
-	char *str = "world";
-	char *null_str = NULL;
-
-	my_printf("Hello, %s! This is a number: %d\n", str, 42);
-	my_printf("This is a null string: %s\n", null_str);
-
-	return 0;
 }
