@@ -1,55 +1,99 @@
-#include "main.h"
+#include <stdio.h>
 
-/**
- * print_int_recursive - Helper function to print integer recursively
- * @n: The integer to print
- * @char_count: Pointer to the character count
- */
-void print_int_recursive(int n, int *char_count)
+void _putchar(char c, int *char_count)
 {
-	char digit;
+    if (write(1, &c, 1) == -1)
+        return;
 
-	if (n == 0)
-		return;
-
-	print_int_recursive(n / 10, char_count);
-	digit = '0' + n % 10;
-	_putchar(digit, char_count);
+    (*char_count)++;
 }
 
-/**
- * print_int - Print a non-negative integer to standard output
- * @n: The integer to print
- * @char_count: Pointer to the character count
- */
-void print_int(int n, int *char_count)
+void print_binary(unsigned int n, int *char_count, char *binary)
 {
-	if (n == 0)
-	{
-		_putchar('0', char_count);
-	}
-	else if (n < 0)
-	{
-		_putchar('-', char_count);
-		print_int_recursive(-n, char_count);
-	}
-	else
-	{
-		print_int_recursive(n, char_count);
-	}
+    int i;
+    int digit;
+    int _zeros = 1;  /* zeros */
+
+    for (i = 31; i >= 0; i--)
+    {
+        digit = (n >> i) & 1;
+
+        if (digit || !_zeros)
+        {
+            _putchar(digit + '0', char_count);
+            _zeros = 0;  /* no longer used */
+            *binary = digit + '0';
+            binary++;
+        }
+    }
+
+    // If the integer was 0, print a single 0
+    if (_zeros)
+    {
+        _putchar('0', char_count);
+        *binary = '0';
+    }
+    else
+    {
+        *binary = '\0';  // Null-terminate the string
+    }
 }
 
-/**
- * print_binary - Print an unsigned integer in binary format
- * @num: The unsigned integer to print
- * @char_count: Pointer to the character count
- */
-void print_binary(unsigned int n, int *char_count)
+int binaryToDecimal(const char *binary)
 {
-	int i;
+    int result = 0;
+    while (*binary != '\0')
+    {
+        result = result * 2 + (*binary - '0');
+        binary++;
+    }
+    return result;
+}
 
-	for (i = 31; i >= 0; i--)
-	{
-		_putchar(((n >> i) & 1) + '0', char_count);
-	}
+int binaryToOctal(const char *binary)
+{
+    int result = 0;
+    int weight = 1;
+    int digit;
+    while (*binary != '\0')
+    {
+        digit = *binary - '0';
+        result = result * 2 + digit;
+        weight *= 2;
+        binary++;
+    }
+    return result;
+}
+
+int binaryToHexadecimal(const char *binary)
+{
+    int result = 0;
+    int weight = 1;
+    int digit;
+    while (*binary != '\0')
+    {
+        digit = *binary - '0';
+        result = result * 2 + digit;
+        weight *= 2;
+        binary++;
+    }
+    return result;
+}
+
+int main(void)
+{
+    int char_count = 0;
+    char binary_representation[32];  // Assuming a 32-bit integer
+
+    unsigned int number = 200;  // Replace with your desired number
+
+    printf("Binary representation of %u: ", number);
+    print_binary(number, &char_count, binary_representation);
+    printf("\n");
+
+    printf("Decimal: %d\n", binaryToDecimal(binary_representation));
+    printf("Octal: %o\n", binaryToOctal(binary_representation));
+    printf("Hexadecimal: %X\n", binaryToHexadecimal(binary_representation));
+
+    return 0;
 }
